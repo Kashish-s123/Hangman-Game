@@ -1,54 +1,45 @@
 import random
 
-# List of predefined words
-words = ["python", "django", "computer", "program", "developer"]
+word_list = ["python", "college", "laptop", "coding", "student"]
 
-# Select a random word
-word = random.choice(words)
+secret_word = random.choice(word_list)
 
-# Create blanks for the word
-guessed_word = ["_"] * len(word)
+guessed_letters = ""
+chances = 6
 
-# Store guessed letters
-guessed_letters = []
+print("===== HANGMAN GAME =====")
+print("Guess the word one letter at a time")
 
-# Maximum incorrect guesses
-attempts = 6
+while chances > 0:
 
-print("Welcome to Hangman!")
-print("You have 6 incorrect guesses.")
+    display_word = ""
 
-while attempts > 0 and "_" in guessed_word:
-    print("\nWord:", " ".join(guessed_word))
-    print("Guessed letters:", ", ".join(guessed_letters))
-    print("Remaining attempts:", attempts)
+    for letter in secret_word:
+        if letter in guessed_letters:
+            display_word += letter + " "
+        else:
+            display_word += "_ "
+
+    print("\nWord:", display_word)
+
+    if "_" not in display_word:
+        print("\nYou Won!")
+        print("The word was:", secret_word)
+        break
 
     guess = input("Enter a letter: ").lower()
 
-    # Validate input
-    if len(guess) != 1 or not guess.isalpha():
-        print("Please enter a single alphabet letter.")
-        continue
-
     if guess in guessed_letters:
-        print("You already guessed that letter.")
+        print("You already guessed this letter.")
         continue
 
-    guessed_letters.append(guess)
+    guessed_letters += guess
 
-    # Check if letter exists in word
-    if guess in word:
-        print("Correct guess!")
+    if guess not in secret_word:
+        chances -= 1
+        print("Wrong Guess!")
+        print("Remaining Chances:", chances)
 
-        for i in range(len(word)):
-            if word[i] == guess:
-                guessed_word[i] = guess
-    else:
-        print("Wrong guess!")
-        attempts -= 1
-
-# Game result
-if "_" not in guessed_word:
-    print("\nCongratulations! You guessed the word:", word)
-else:
-    print("\nGame Over! The word was:", word)
+if chances == 0:
+    print("\nGame Over!")
+    print("The correct word was:", secret_word)
